@@ -8,15 +8,14 @@ export default function LoginPage(){
     const navigate = useNavigate();
 
     return (
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col w-screen">
             <div className="fixed top-0 left-0 w-full bg-white shadow-md z-50">
                 <Header />
             </div>
-            <div className="flex flex-col mt-10">
+            <div className="flex justify-between content-center mt-16 w-full ">
                 <Clock />
                 <LoginForm />
             </div>
-            <button onClick={() => navigate("main")}> на граф </button>
         </div>
     )
 }

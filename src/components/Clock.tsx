@@ -28,15 +28,15 @@ export default function Clock() {
     };
 
     return (
-        <>
+        <div className="flex flex-col ml-32">
             <div className="clock">
                 <div className="hour" style={{transform: `rotateZ(${hh + mm / 12}deg)`}}></div>
                 <div className="min" style={{transform: `rotateZ(${mm}deg)`}}></div>
                 <div className="sec" style={{transform: `rotateZ(${ss}deg)`}}></div>
             </div>
             <div className="switch-cont">
-                <button className="switch-btn" onClick={switchTheme}> Light</button>
+                <button className="switch-btn w-16 h-8 text-center text-xs" onClick={switchTheme}> Light</button>
             </div>
-        </>
+        </div>
     )
 }
