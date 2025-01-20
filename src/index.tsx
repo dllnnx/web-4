@@ -2,14 +2,17 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import "./assets/index.css";
-import App from "./pages/LoginPage";
 import MainPage from "./pages/MainPage";
+import LoginPage from "./pages/LoginPage";
+import 'primereact/resources/themes/saga-blue/theme.css';
+import 'primereact/resources/primereact.min.css';
+import 'primeicons/primeicons.css';
 
 const router = createBrowserRouter(
     [
         {
             path: "/",
-            element: <App />
+            element: <LoginPage />
         },
         {
             path: "/main",

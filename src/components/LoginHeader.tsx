@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Header() {
+export default function LoginHeader() {
     return (
         <header className="text-center">
             <h1>Лабораторная работа №4</h1>

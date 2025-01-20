@@ -40,7 +40,11 @@ export default function LoginForm() {
                     />
                 </div>
             )}
-            <button className="bg-blue-500 text-white rounded-md p-2 mt-2" onClick={() => navigate("main")}>
+            <button
+                type="button"
+                className="bg-blue-500 text-white rounded-md p-2 mt-2"
+                onClick={() => navigate("/main")}
+            >
                 {isRegistering ? "зарегистрироваться" : "войти"}
             </button>
             <button
