@@ -4,9 +4,6 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import "./assets/index.css";
 import MainPage from "./pages/MainPage";
 import LoginPage from "./pages/LoginPage";
-import 'primereact/resources/themes/saga-blue/theme.css';
-import 'primereact/resources/primereact.min.css';
-import 'primeicons/primeicons.css';
 
 const router = createBrowserRouter(
     [

@@ -42,14 +42,16 @@ export default function LoginForm() {
             )}
             <button
                 type="button"
-                className="bg-blue-500 text-white rounded-md p-2 mt-2"
+                className=" text-white rounded-md p-2 mt-2"
+                style={{backgroundColor: "#666666"}}
                 onClick={() => navigate("/main")}
             >
                 {isRegistering ? "зарегистрироваться" : "войти"}
             </button>
             <button
                 type="button"
-                className="bg-blue-500 text-white rounded-md p-2 mt-3"
+                className="text-white rounded-md p-2 mt-3"
+                style={{backgroundColor: "#666666"}}
                 onClick={toggleRegisterMode}
             >
                 {isRegistering ? "я уверенный пользователь сайта" : "я тут первый раз ваще"}

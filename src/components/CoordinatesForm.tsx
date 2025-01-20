@@ -83,7 +83,7 @@ export default function CoordinatesForm (){
                     onClick={handleSubmit}
                     disabled={!!error}
                     outlined
-                    className="hover:bg-blue-500"
+                    className="bg-purple-900"
                 />
                 <Button
                     label="Очистить"

@@ -1,9 +1,7 @@
 import React from "react";
 import Graph from "../components/Graph";
 import CoordinatesForm from "../components/CoordinatesForm";
-import {Button} from "@mui/material";
 import MainHeader from "../components/MainHeader";
-import DeleteIcon from '@mui/icons-material/Delete';
 import ResultTable from "../components/ResultTable";
 
 export default function MainPage(){
@@ -17,7 +15,6 @@ export default function MainPage(){
             </div>
             <div className="flex flex-col justify-center grow-0 space-y-4">
                 <Graph width={300} height={300}/>
-
             </div>
             <div>
                 <ResultTable />

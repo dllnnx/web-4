@@ -7,7 +7,6 @@ import {
     TableCell,
     TableContainer,
     TableHead,
-    TablePagination,
     TableRow
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
