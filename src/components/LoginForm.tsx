@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {useNavigate} from "react-router-dom";
+import {Button} from "@mui/material";
 
 export default function LoginForm() {
     const [isRegistering, setIsRegistering] = useState(false);
@@ -40,22 +41,23 @@ export default function LoginForm() {
                     />
                 </div>
             )}
-            <button
-                type="button"
-                className=" text-white rounded-md p-2 mt-2"
-                style={{backgroundColor: "#666666"}}
-                onClick={() => navigate("/main")}
-            >
-                {isRegistering ? "зарегистрироваться" : "войти"}
-            </button>
-            <button
-                type="button"
-                className="text-white rounded-md p-2 mt-3"
-                style={{backgroundColor: "#666666"}}
-                onClick={toggleRegisterMode}
-            >
-                {isRegistering ? "я уверенный пользователь сайта" : "я тут первый раз ваще"}
-            </button>
+            <div className="space-y-2 flex flex-col">
+                <Button
+                    variant="contained"
+                    color="primary"
+                    size="medium"
+                    onClick={() => navigate("/main")}>
+                    {isRegistering ? "зарегистрироваться" : "войти"}
+                </Button>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    size="medium"
+                    onClick={toggleRegisterMode}
+                >
+                    {isRegistering ? "я уже смешарик" : "я тут первый раз ваще"}
+                </Button>
+            </div>
         </form>
     );
 }

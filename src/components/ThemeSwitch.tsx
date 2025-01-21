@@ -2,17 +2,18 @@ import React, { useState } from "react";
 import { FormControlLabel, Switch, styled } from "@mui/material";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
+import { useTheme } from "./ThemeContext";
 
-const ThemeSwitch = styled(Switch)(({}) => ({
-    width: 72,
-    height: 34,
+const StyledSwitch = styled(Switch)(({theme}) => ({
+    width: 70,
+    height: 29,
     padding: 7,
     "& .MuiSwitch-switchBase": {
-        margin: 3,
+        margin: 1,
         padding: 0,
         transform: "translateX(3px)",
         "&.Mui-checked": {
-            color: "#1e1f26",
+            color: "#343435",
             transform: "translateX(40px)",
             "& + .MuiSwitch-track": {
                 backgroundColor: "#aab4be",
@@ -38,22 +39,18 @@ const ThemeSwitch = styled(Switch)(({}) => ({
     },
 }));
 
-export default function ThemeToggle() {
-    const [isDark, setIsDark] = useState(false);
-
-    const toggleTheme = () => {
-        setIsDark((prev) => !prev);
-        document.documentElement.setAttribute("data-theme", isDark ? "light" : "dark");
-    };
+export default function ThemeSwitch() {
+    const { isDark, toggleTheme } = useTheme();
 
     return (
         <FormControlLabel
             control={
-                <ThemeSwitch
+                <StyledSwitch
                     checked={isDark}
                     onChange={toggleTheme}
+                    className="mr-2"
                     icon={
-                    <div style={{borderRadius: "50%", backgroundColor: "#1e1f26", padding: "2px"}}>
+                    <div style={{borderRadius: "50%", backgroundColor: "#343435", padding: "2px"}}>
                         <LightModeOutlinedIcon className="-mt-0.5"/>
                     </div>
                 }

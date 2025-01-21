@@ -21,3 +21,31 @@ body {
 .header-shadow {
     box-shadow: 0 4px 20px var(--shadow-color);
 }
+
+.p-slider .p-slider-range {
+    background-color: #9999CC;
+}
+
+.p-slider .p-slider-handle {
+    background-color: #9999CC;
+    border-color: #9999CC;
+}
+
+.p-inputtext {
+    border: 1px solid #666666;
+    border-radius: 4px;
+    padding: 4px;
+    box-shadow: none;
+    transition: border-color 0.3s ease;
+    color: #333333
+}
+
+.p-inputtext:focus {
+    border-color: #9999CC;
+    outline: none;
+    box-shadow: 0 0 4px #9999CC;
+}
+
+.p-inputtext:hover {
+    border-color: #9999CC;
+}

@@ -7,7 +7,7 @@ import ResultTable from "../components/ResultTable";
 export default function MainPage(){
     return (
         <div className="flex justify-between w-screen h-screen">
-            <div className="fixed top-0 left-0 w-full bg-white shadow-md z-50">
+            <div className="fixed top-0 left-0 w-full header-shadow z-50">
                 <MainHeader/>
             </div>
             <div className="flex ml-10 flex-col justify-center">

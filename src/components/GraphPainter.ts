@@ -5,7 +5,7 @@ export default class GraphPainter {
     TEXT_LINE_HEIGHT = 3;
     COLOR_RED = "#b50300"
     COLOR_GREEN = "#00b509"
-    COLOR_MAIN = "#684b8c"
+    COLOR_MAIN = "#9999CC"
     WIDTH_IN_POINTS = 12;
 
     canvas: HTMLCanvasElement
@@ -42,7 +42,7 @@ export default class GraphPainter {
     }
 
     drawAxes() {
-        this.ctx.fillStyle = "black";
+        this.ctx.fillStyle = "#666666";
         this.drawArrow(-this.SIZE, this.SIZE / 2, this.SIZE, this.SIZE / 2);
         this.drawArrow( this.SIZE / 2, this.SIZE, this.SIZE / 2, 0);
     }
@@ -101,6 +101,7 @@ export default class GraphPainter {
         let dx = tox - fromx;
         let dy = toy - fromy;
         let angle = Math.atan2(dy, dx);
+        this.ctx.strokeStyle = "#666666";
         this.ctx.beginPath();
         this.ctx.lineWidth = this.LINE_WIDTH;
         this.ctx.moveTo(fromx, fromy);
