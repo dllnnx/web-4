@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "react-scripts start"
+    "start": "../node_modules/.bin/react-scripts start"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
