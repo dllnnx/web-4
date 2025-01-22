@@ -33,8 +33,26 @@ export default function CoordinatesForm (){
         }
     };
 
-    const handleSubmit = () => {
-        alert(`Координаты: X=${x}, Y=${y}, Радиус=${radius}`);
+    const handleSubmit = async () => {
+        const url = `http://localhost:24147/backend/api/results?x=${x}&y=${y}&r=${radius}`;
+
+        try {
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log(`Ответ от сервера: ${JSON.stringify(data)}`);
+            } else {
+                console.log(`Ошибка: ${response.status} ${response.statusText}`);
+            }
+        } catch (error) {
+            console.log(`Произошла ошибка: ${error}`);
+        }
     };
 
     return (

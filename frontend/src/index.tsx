@@ -6,6 +6,8 @@ import MainPage from "./pages/MainPage";
 import LoginPage from "./pages/LoginPage";
 import {createTheme, ThemeProvider} from "@mui/material/styles";
 import {CustomThemeProvider} from "./components/ThemeContext";
+import store from "./store/store";
+import {Provider} from "react-redux";
 
 const router = createBrowserRouter(
     [
@@ -44,11 +46,13 @@ const libTheme = createTheme({
 
 const root = createRoot(document.getElementById("root"));
 root.render(
-    <ThemeProvider theme={libTheme}>
-        <CustomThemeProvider>
-            <React.StrictMode>
-                <RouterProvider router={router} />
-            </React.StrictMode>
-        </CustomThemeProvider>
-    </ThemeProvider>
+    <Provider store={store}>
+        <ThemeProvider theme={libTheme}>
+            <CustomThemeProvider>
+                <React.StrictMode>
+                    <RouterProvider router={router} />
+                </React.StrictMode>
+            </CustomThemeProvider>
+        </ThemeProvider>
+    </Provider>
 );
