@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import {useNavigate} from "react-router-dom";
-import {Button} from "@mui/material";
+import {Button, CircularProgress} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
 import {loginSuccess, setError} from "../store/slices/authSlice";
 
 export default function LoginForm() {
     const [isRegistering, setIsRegistering] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [login, setLogin] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -15,6 +16,7 @@ export default function LoginForm() {
     const error = useSelector((state) => state.auth.error);
 
     const toggleRegisterMode = () => {
+        dispatch(setError(null));
         setIsRegistering(!isRegistering);
     };
 
@@ -30,6 +32,7 @@ export default function LoginForm() {
 
         const endpoint = isRegistering ? "/auth/register" : "/auth/login";
         console.log(`так так щас я добавляю пользователя ${login}`);
+        setIsLoading(true);
         try {
             const response = await fetch(`http://localhost:24147/backend/api${endpoint}`, {
                 method: "POST",
@@ -38,7 +41,7 @@ export default function LoginForm() {
             });
 
             if (response.ok) {
-                console.log("так так пользователь ХОРОШ и зарегистрирован");
+                console.log("так так пользователь ХОРОШ и добавлен");
                 const data = await response.json();
                 dispatch(loginSuccess({user: login, token: data.token}));
                 navigate("/main");
@@ -56,6 +59,8 @@ export default function LoginForm() {
         } catch (error) {
             console.error("Network error:", error);
             dispatch(setError("Network error: " + error.message));
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -98,8 +103,11 @@ export default function LoginForm() {
                     variant="contained"
                     color="primary"
                     size="medium"
-                    onClick={handleSubmit}>
-                    {isRegistering ? "зарегистрироваться" : "войти"}
+                    onClick={handleSubmit}
+                    disabled={isLoading}
+                    startIcon={isLoading && <CircularProgress size={20} />}
+                >
+                    {isLoading ? "загрузка..." : (isRegistering ? "зарегистрироваться" : "войти")}
                 </Button>
                 <Button
                     variant="contained"
