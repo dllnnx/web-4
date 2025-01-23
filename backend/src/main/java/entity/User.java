@@ -1,4 +1,4 @@
-package beans;
+package entity;
 
 import jakarta.json.Json;
 import jakarta.persistence.CascadeType;

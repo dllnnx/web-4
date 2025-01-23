@@ -1,6 +1,6 @@
 package rest;
 
-import beans.User;
+import entity.User;
 import database.PasswordUtil;
 import database.TokenService;
 import database.UserService;

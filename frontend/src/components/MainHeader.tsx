@@ -15,7 +15,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import ThemeSwitch from "./ThemeSwitch";
 import { useTheme } from "./ThemeContext";
 import { useDispatch } from "react-redux";
-import { logout } from "../store/slices/authSlice";
+import { logout } from "../store/authSlice";
 
 export default function MainHeader() {
     const navigate = useNavigate();

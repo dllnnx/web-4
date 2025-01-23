@@ -1,6 +1,6 @@
 package database;
 
-import beans.User;
+import entity.User;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Persistence;
