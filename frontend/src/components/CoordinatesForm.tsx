@@ -4,7 +4,7 @@ import { InputText } from 'primereact/inputtext';
 import 'primereact/resources/themes/mira/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
-import {Button} from "@mui/material";
+import {Button, CircularProgress} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {CheckOutlined} from "@mui/icons-material";
 import { useSelector } from "react-redux";
@@ -18,6 +18,7 @@ export default function CoordinatesForm ({ onAddResult }: CoordinatesFormProps){
     const [y, setY] = useState<string>('');
     const [r, setR] = useState<number>(1);
     const [error, setError] = useState<boolean>(true);
+    const [isLoading, setIsLoading] = useState(false);
     const token = localStorage.getItem('token');
 
     const handleYChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,7 +39,7 @@ export default function CoordinatesForm ({ onAddResult }: CoordinatesFormProps){
 
     const handleSubmit = async () => {
         const url = `http://localhost:24147/backend/api/results`;
-
+        setIsLoading(true);
         try {
             const response = await fetch(url, {
                 method: 'POST',
@@ -58,6 +59,7 @@ export default function CoordinatesForm ({ onAddResult }: CoordinatesFormProps){
         } catch (error) {
             console.log(`Произошла ошибка: ${error}`);
         }
+        setIsLoading(false);
     };
 
     return (
@@ -109,7 +111,8 @@ export default function CoordinatesForm ({ onAddResult }: CoordinatesFormProps){
                     disabled={!!error}
                     color="secondary"
                     size="medium"
-                    startIcon={<CheckOutlined />}
+                    disabled={isLoading}
+                    startIcon={isLoading ? <CircularProgress size={20}/> : <CheckOutlined />}
                 >
                     проверить
                 </Button>

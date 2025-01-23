@@ -13,6 +13,7 @@ import {
     DialogContent,
     DialogContentText,
     DialogTitle,
+    CircularProgress,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
@@ -32,6 +33,7 @@ interface ResultTableProps {
 
 export default function ResultTable({ results, onClearResults }: ResultTableProps) {
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleDeleteClick = () => {
         setDeleteDialogOpen(true);
@@ -42,6 +44,7 @@ export default function ResultTable({ results, onClearResults }: ResultTableProp
     };
 
     const handleConfirmDelete = async () => {
+        setIsLoading(true);
         try {
             const token = localStorage.getItem("token");
             const response = await fetch("http://localhost:24147/backend/api/results", {
@@ -61,6 +64,7 @@ export default function ResultTable({ results, onClearResults }: ResultTableProp
         } catch (error) {
             console.error("Произошла ошибка при удалении результатов:", error);
         }
+        setIsLoading(false);
     };
 
     return (
@@ -112,7 +116,12 @@ export default function ResultTable({ results, onClearResults }: ResultTableProp
                     <Button onClick={handleClose} color="primary">
                         Отмена
                     </Button>
-                    <Button onClick={handleConfirmDelete} color="error">
+                    <Button
+                        onClick={handleConfirmDelete}
+                        color="error"
+                        disabled={isLoading}
+                        startIcon={isLoading && <CircularProgress size={20} />}
+                    >
                         Удалить
                     </Button>
                 </DialogActions>
