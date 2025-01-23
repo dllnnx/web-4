@@ -7,6 +7,7 @@ import database.TokenService;
 import jakarta.ejb.EJB;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.GET;
 import jakarta.ws.rs.HeaderParam;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -91,6 +92,7 @@ public class ResultsResource {
 
         try {
             resultService.clearResultsForUser(user);
+            user.clearResults();
             return Response
                     .status(Response.Status.OK)
                     .entity("All results cleared successfully")
@@ -99,6 +101,37 @@ public class ResultsResource {
             return Response
                     .status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("Error while clearing results")
+                    .build();
+        }
+    }
+
+    @GET
+    public Response getResults(@HeaderParam("Authorization") String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return Response
+                    .status(Response.Status.UNAUTHORIZED)
+                    .entity("Token not found")
+                    .build();
+        }
+
+        String token = authHeader.substring("Bearer ".length());
+        User user = tokenService.getUserFromToken(token);
+        if (Objects.isNull(user)) {
+            return Response
+                    .status(Response.Status.UNAUTHORIZED)
+                    .entity("User not found")
+                    .build();
+        }
+
+        try {
+            return Response
+                    .status(Response.Status.OK)
+                    .entity(user.getResultsAsJSON())
+                    .build();
+        } catch (Exception e) {
+            return Response
+                    .status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Error while fetching results")
                     .build();
         }
     }

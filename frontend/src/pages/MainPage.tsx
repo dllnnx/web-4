@@ -15,7 +15,30 @@ export default function MainPage(){
         if (!token) {
             navigate("/");
         }
-    })
+
+        const fetchResults = async () => {
+            try {
+                const response = await fetch("http://localhost:24147/backend/api/results", {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    setResults(data);
+                } else {
+                    console.error("Ошибка получения результатов:", response.statusText);
+                }
+            } catch (error) {
+                console.error("Произошла ошибка при получении результатов:", error);
+            }
+        };
+
+        fetchResults();
+    }, [navigate]);
 
     const handleAddResult = (result: any) => {
         setResults((prevResults) => [...prevResults, result]);

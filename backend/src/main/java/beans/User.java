@@ -1,5 +1,6 @@
 package beans;
 
+import jakarta.json.Json;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -44,14 +45,14 @@ public class User implements Serializable {
     }
 
     public String getResultsAsJSON() {
-        StringBuilder sb = new StringBuilder("[");
-        results.forEach((item) -> sb.append(item.toString()));
-        sb.append("]");
-        return sb.toString().replaceAll("}\\{", "}, {");
+        return Json.createArrayBuilder(
+                results.stream()
+                        .map(Result::toJSONObject)
+                        .toList()
+        ).build().toString();
     }
 
     public void clearResults() {
         results.clear();
-        // TODO: clear all dots from database
     }
 }
