@@ -10,7 +10,7 @@ import java.util.Date;
 
 @Stateless
 public class TokenService {
-    private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS512);;
+    private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS512);
     private static final long EXPIRATION_TIME = 86400000; // 24 hours
 
     public String generateToken(String login) {
@@ -30,7 +30,7 @@ public class TokenService {
                     .getBody()
                     .getSubject();
         } catch (Exception e) {
-            return null; // Возвращаем null, если токен недействителен
+            return null;
         }
     }
 }

@@ -22,11 +22,11 @@ export default function LoginForm() {
 
     const handleSubmit = async () => {
         if (!login || !password) {
-            dispatch(setError("Заполните все поля!"));
+            dispatch(setError("Заполните все поля"));
             return;
         }
         if (isRegistering && password !== confirmPassword) {
-            dispatch(setError("Пароли не совпадают!"));
+            dispatch(setError("Пароли не совпадают"));
             return;
         }
 
@@ -71,7 +71,7 @@ export default function LoginForm() {
                 <input
                     type="text"
                     id="login"
-                    className="border border-black rounded-md p-2 w-3/4"
+                    className="border border-color-auth text-color-input rounded-md p-2 w-3/4"
                     placeholder="ваш логин"
                     onChange={(e) => setLogin(e.target.value)}
                 />
@@ -81,7 +81,7 @@ export default function LoginForm() {
                 <input
                     type="password"
                     id="password"
-                    className="border border-black rounded-md p-2 w-3/4"
+                    className="border border-color-auth text-color-input rounded-md p-2 w-3/4"
                     placeholder="ваш пароль"
                     onChange={(e) => setPassword(e.target.value)}
                 />
@@ -92,7 +92,7 @@ export default function LoginForm() {
                     <input
                         type="password"
                         id="confirmPassword"
-                        className="border border-black rounded-md p-2 w-3/4 ml-auto"
+                        className="border border-color-auth text-color-input rounded-md p-2 w-3/4 ml-auto"
                         placeholder="повторите пароль"
                         onChange={(e) => setConfirmPassword(e.target.value)}
                     />
