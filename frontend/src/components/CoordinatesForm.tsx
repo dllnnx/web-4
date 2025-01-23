@@ -1,21 +1,24 @@
 import React, { useState } from 'react';
 import { Slider } from 'primereact/slider';
 import { InputText } from 'primereact/inputtext';
-
-
 import 'primereact/resources/themes/mira/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import {Button} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {CheckOutlined} from "@mui/icons-material";
+import { useSelector } from "react-redux";
 
+interface CoordinatesFormProps {
+    onAddResult: (result: any) => void;
+}
 
-export default function CoordinatesForm (){
+export default function CoordinatesForm ({ onAddResult }: CoordinatesFormProps){
     const [x, setX] = useState<number>(0);
     const [y, setY] = useState<string>('');
-    const [radius, setRadius] = useState<number>(1);
+    const [r, setR] = useState<number>(1);
     const [error, setError] = useState<boolean>(true);
+    const token = useSelector((state: any) => state.auth.token);
 
     const handleYChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
@@ -34,19 +37,22 @@ export default function CoordinatesForm (){
     };
 
     const handleSubmit = async () => {
-        const url = `http://localhost:24147/backend/api/results?x=${x}&y=${y}&r=${radius}`;
+        const url = `http://localhost:24147/backend/api/results`;
 
         try {
             const response = await fetch(url, {
-                method: 'GET',
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
                 },
+                body: JSON.stringify({ x, y, r }),
             });
 
             if (response.ok) {
                 const data = await response.json();
                 console.log(`Ответ от сервера: ${JSON.stringify(data)}`);
+                onAddResult(data);
             } else {
                 console.log(`Ошибка: ${response.status} ${response.statusText}`);
             }
@@ -87,15 +93,15 @@ export default function CoordinatesForm (){
                 <label htmlFor="radius-slider">r</label>
                 <Slider
                     id="radius-slider"
-                    value={radius}
-                    onChange={(e) => setRadius(e.value as number)}
+                    value={r}
+                    onChange={(e) => setR(e.value as number)}
                     min={0.1}
                     max={5}
                     step={0.1}
                     className="w-3/4 ml-6 mt-3"
                 />
             </div>
-            <p className="w-3/4 text-center ml-8">{radius}</p>
+            <p className="w-3/4 text-center ml-8">{r}</p>
 
             <div className="flex justify-between">
                 <Button
@@ -116,7 +122,7 @@ export default function CoordinatesForm (){
                     onClick={() => {
                         setX(0);
                         setY('');
-                        setRadius(1);
+                        setR(1);
                         setError(true);
                     }}
                 >

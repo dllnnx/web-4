@@ -13,6 +13,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import jakarta.json.JsonObject;
 import java.io.Serializable;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+
 import jakarta.json.Json;
 
 @Entity
@@ -61,6 +65,11 @@ public class Result implements Serializable {
                 .add("y", y)
                 .add("r", r)
                 .add("isHit", isHit)
+                .add("scriptTime", scriptTime)
+                .add("startTime", LocalDateTime
+                        .ofInstant(Instant.ofEpochMilli(startTime), ZoneId.systemDefault())
+                        .format(java.time.format.DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"))
+                )
                 .build();
     }
 

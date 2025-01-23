@@ -2,7 +2,11 @@ package rest;
 
 import beans.Result;
 import beans.User;
-import jakarta.ws.rs.GET;
+import database.TokenService;
+import jakarta.ejb.EJB;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.HeaderParam;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
@@ -14,15 +18,25 @@ import java.util.Objects;
 
 @Path("/results")
 @Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 public class ResultsResource {
-    @GET
+    @EJB
+    private TokenService tokenService;
+
+    @POST
     public Response addResult (
-            @QueryParam("login") String login,
-            @QueryParam("x") double x,
-            @QueryParam("y") double y,
-            @QueryParam("r") double r) {
+            @HeaderParam("Authorization") String authHeader,
+            Result dot) {
         long startTime = System.currentTimeMillis();
-        User user = new User(); //TODO: get user from database by login
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return Response
+                    .status(Response.Status.UNAUTHORIZED)
+                    .entity("Token not found")
+                    .build();
+        }
+
+        String token = authHeader.substring("Bearer ".length());
+        User user = tokenService.getUserFromToken(token); //TODO: Implement this method
         if (Objects.isNull(user)) {
             return Response
                     .status(Response.Status.UNAUTHORIZED)
@@ -30,6 +44,7 @@ public class ResultsResource {
                     .build();
         }
 
+        double x = dot.getX(), y = dot.getY(), r = dot.getR();
         if (!new Validator(x, y, r).validateDot())
             return Response
                     .status(Response.Status.BAD_REQUEST)

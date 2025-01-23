@@ -23,10 +23,10 @@ public class UserService {
         }
     }
 
-    public User findByUsername(String username) {
-        String query = "SELECT u FROM User u WHERE u.login = :username";
+    public User findByUsername(String login) {
+        String query = "SELECT u FROM User u WHERE u.login = :login";
         TypedQuery<User> typedQuery = em.createQuery(query, User.class);
-        typedQuery.setParameter("username", username);
+        typedQuery.setParameter("login", login);
         return typedQuery.getResultStream().findFirst().orElse(null);
     }
 
