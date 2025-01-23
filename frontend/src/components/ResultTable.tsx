@@ -85,31 +85,31 @@ export default function ResultTable({ results, onClearResults, onClearGraph }: R
 
     return (
         <div className="mr-4 space-y-4">
-            <TableContainer component={Paper} className="mt-16">
-            <Table>
+            <TableContainer component={Paper} className="mt-16" style={{ backgroundColor: "var(--table-color)"}}>
+            <Table style={{ backgroundColor: "var(--table-color)"}}>
                 <TableHead>
                     <TableRow>
-                        <TableCell>x</TableCell>
-                        <TableCell>y</TableCell>
-                        <TableCell>r</TableCell>
-                        <TableCell>результат</TableCell>
-                        <TableCell>время (мс)</TableCell>
-                        <TableCell>дата и время</TableCell>
+                        <TableCell style={{ color: "var(--table-text-color" }}>x</TableCell>
+                        <TableCell style={{ color: "var(--table-text-color" }}>y</TableCell>
+                        <TableCell style={{ color: "var(--table-text-color" }}>r</TableCell>
+                        <TableCell style={{ color: "var(--table-text-color" }}>результат</TableCell>
+                        <TableCell style={{ color: "var(--table-text-color" }}>время (мс)</TableCell>
+                        <TableCell style={{ color: "var(--table-text-color" }}>дата и время</TableCell>
                     </TableRow>
                 </TableHead>
-                <TableBody>
+                <TableBody style={{ color: "var(--table-text-color" }}>
                     {results
                         .slice()
                         .reverse()
                         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                         .map((result, index) => (
                             <TableRow key={index}>
-                                <TableCell>{result.x}</TableCell>
-                                <TableCell>{result.y}</TableCell>
-                                <TableCell>{result.r}</TableCell>
-                                <TableCell>{result.isHit ? "попадание" : "мимо"}</TableCell>
-                                <TableCell>{result.scriptTime}</TableCell>
-                                <TableCell className="break-words">{result.startTime}</TableCell>
+                                <TableCell style={{ color: "var(--table-text-color" }}>{result.x}</TableCell>
+                                <TableCell style={{ color: "var(--table-text-color" }}>{result.y}</TableCell>
+                                <TableCell style={{ color: "var(--table-text-color" }}>{result.r}</TableCell>
+                                <TableCell style={{ color: "var(--table-text-color" }}>{result.isHit ? "попадание" : "мимо"}</TableCell>
+                                <TableCell style={{ color: "var(--table-text-color" }}>{result.scriptTime}</TableCell>
+                                <TableCell className="break-words" style={{ color: "var(--table-text-color" }}>{result.startTime}</TableCell>
                             </TableRow>
                         ))}
                 </TableBody>
