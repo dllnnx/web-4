@@ -108,10 +108,9 @@ export default function CoordinatesForm ({ onAddResult }: CoordinatesFormProps){
                 <Button
                     variant="contained"
                     onClick={handleSubmit}
-                    disabled={!!error}
                     color="secondary"
                     size="medium"
-                    disabled={isLoading}
+                    disabled={isLoading || !!error}
                     startIcon={isLoading ? <CircularProgress size={20}/> : <CheckOutlined />}
                 >
                     проверить

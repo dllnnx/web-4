@@ -14,6 +14,7 @@ import {
     DialogContentText,
     DialogTitle,
     CircularProgress,
+    TablePagination,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
@@ -34,6 +35,10 @@ interface ResultTableProps {
 export default function ResultTable({ results, onClearResults }: ResultTableProps) {
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+
+    // pagination
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
 
     const handleDeleteClick = () => {
         setDeleteDialogOpen(true);
@@ -67,6 +72,15 @@ export default function ResultTable({ results, onClearResults }: ResultTableProp
         setIsLoading(false);
     };
 
+    const handleChangePage = (event: unknown, newPage: number) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
+
     return (
         <div className="mr-4 space-y-4">
             <TableContainer component={Paper} className="mt-16">
@@ -82,18 +96,31 @@ export default function ResultTable({ results, onClearResults }: ResultTableProp
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {results.map((result, index) => (
-                        <TableRow key={index}>
-                            <TableCell>{result.x}</TableCell>
-                            <TableCell>{result.y}</TableCell>
-                            <TableCell>{result.r}</TableCell>
-                            <TableCell>{result.isHit ? "попадание" : "мимо"}</TableCell>
-                            <TableCell>{result.scriptTime}</TableCell>
-                            <TableCell>{result.startTime}</TableCell>
-                        </TableRow>
-                    ))}
+                    {results
+                        .slice()
+                        .reverse()
+                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                        .map((result, index) => (
+                            <TableRow key={index}>
+                                <TableCell>{result.x}</TableCell>
+                                <TableCell>{result.y}</TableCell>
+                                <TableCell>{result.r}</TableCell>
+                                <TableCell>{result.isHit ? "попадание" : "мимо"}</TableCell>
+                                <TableCell>{result.scriptTime}</TableCell>
+                                <TableCell>{result.startTime}</TableCell>
+                            </TableRow>
+                        ))}
                 </TableBody>
             </Table>
+            <TablePagination
+                rowsPerPageOptions={[5, 10, 15]}
+                component="div"
+                count={results.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+            />
             </TableContainer>
             <Button
                 variant="outlined"
