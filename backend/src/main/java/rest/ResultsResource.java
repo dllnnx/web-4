@@ -1,7 +1,7 @@
 package rest;
 
-import beans.Result;
-import beans.User;
+import entity.Result;
+import entity.User;
 import database.ResultService;
 import database.TokenService;
 import jakarta.ejb.EJB;

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import {useNavigate} from "react-router-dom";
 import {Button, CircularProgress} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
-import {loginSuccess, setError} from "../store/slices/authSlice";
+import {loginSuccess, setError} from "../store/authSlice";
 
 export default function LoginForm() {
     const [isRegistering, setIsRegistering] = useState(false);
