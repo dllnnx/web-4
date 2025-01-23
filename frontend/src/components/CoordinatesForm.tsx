@@ -18,7 +18,7 @@ export default function CoordinatesForm ({ onAddResult }: CoordinatesFormProps){
     const [y, setY] = useState<string>('');
     const [r, setR] = useState<number>(1);
     const [error, setError] = useState<boolean>(true);
-    const token = useSelector((state: any) => state.auth.token);
+    const token = localStorage.getItem('token');
 
     const handleYChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;

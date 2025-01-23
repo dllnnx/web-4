@@ -9,7 +9,6 @@ import jakarta.ws.rs.HeaderParam;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import validation.Validator;
@@ -36,7 +35,7 @@ public class ResultsResource {
         }
 
         String token = authHeader.substring("Bearer ".length());
-        User user = tokenService.getUserFromToken(token); //TODO: Implement this method
+        User user = tokenService.getUserFromToken(token);
         if (Objects.isNull(user)) {
             return Response
                     .status(Response.Status.UNAUTHORIZED)
