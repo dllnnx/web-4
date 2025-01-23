@@ -51,7 +51,6 @@ export default function CoordinatesForm ({ onAddResult }: CoordinatesFormProps){
 
             if (response.ok) {
                 const data = await response.json();
-                console.log(`Ответ от сервера: ${JSON.stringify(data)}`);
                 onAddResult(data);
             } else {
                 console.log(`Ошибка: ${response.status} ${response.statusText}`);

@@ -41,7 +41,6 @@ public class User implements Serializable {
     public void addResult(Result result) {
         results.add(result);
         result.setUser(this);
-        //TODO: save result to database
     }
 
     public String getResultsAsJSON() {

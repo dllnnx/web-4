@@ -2,9 +2,11 @@ package rest;
 
 import beans.Result;
 import beans.User;
+import database.ResultService;
 import database.TokenService;
 import jakarta.ejb.EJB;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.HeaderParam;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -21,6 +23,8 @@ import java.util.Objects;
 public class ResultsResource {
     @EJB
     private TokenService tokenService;
+    @EJB
+    private ResultService resultService;
 
     @POST
     public Response addResult (
@@ -54,9 +58,48 @@ public class ResultsResource {
         result.setScriptTime(System.currentTimeMillis() - startTime);
         result.setStartTime(startTime);
         user.addResult(result);
-        return Response
-                .status(Response.Status.OK)
-                .entity(result.toJSONObject())
-                .build();
+        if (resultService.saveResultToDb(result)) {
+            return Response
+                    .status(Response.Status.OK)
+                    .entity(result.toJSONObject())
+                    .build();
+        } else {
+            return Response
+                    .status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Error while saving result")
+                    .build();
+        }
+    }
+
+    @DELETE
+    public Response clearResults(@HeaderParam("Authorization") String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return Response
+                    .status(Response.Status.UNAUTHORIZED)
+                    .entity("Token not found")
+                    .build();
+        }
+
+        String token = authHeader.substring("Bearer ".length());
+        User user = tokenService.getUserFromToken(token);
+        if (Objects.isNull(user)) {
+            return Response
+                    .status(Response.Status.UNAUTHORIZED)
+                    .entity("User not found")
+                    .build();
+        }
+
+        try {
+            resultService.clearResultsForUser(user);
+            return Response
+                    .status(Response.Status.OK)
+                    .entity("All results cleared successfully")
+                    .build();
+        } catch (Exception e) {
+            return Response
+                    .status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Error while clearing results")
+                    .build();
+        }
     }
 }

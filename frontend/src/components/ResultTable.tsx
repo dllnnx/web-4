@@ -7,7 +7,12 @@ import {
     TableCell,
     TableContainer,
     TableHead,
-    TableRow
+    TableRow,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
@@ -26,15 +31,37 @@ interface ResultTableProps {
 }
 
 export default function ResultTable({ results, onClearResults }: ResultTableProps) {
-    // const [results, setResults] = useState<Result[]>([]);
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
-    // const handleAddResult = (newResult: Result) => {
-    //     setResults((prevResults) => [...prevResults, newResult]);
-    // };
-    //
-    // const handleClearResults = () => {
-    //     setResults([]);
-    // };
+    const handleDeleteClick = () => {
+        setDeleteDialogOpen(true);
+    };
+
+    const handleClose = () => {
+        setDeleteDialogOpen(false);
+    };
+
+    const handleConfirmDelete = async () => {
+        try {
+            const token = localStorage.getItem("token");
+            const response = await fetch("http://localhost:24147/backend/api/results", {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            if (response.ok) {
+                onClearResults();
+                setDeleteDialogOpen(false);
+            } else {
+                console.error("Ошибка удаления результатов:", response.statusText);
+            }
+        } catch (error) {
+            console.error("Произошла ошибка при удалении результатов:", error);
+        }
+    };
 
     return (
         <div className="mr-4 space-y-4">
@@ -69,10 +96,27 @@ export default function ResultTable({ results, onClearResults }: ResultTableProp
                 color="error"
                 size="small"
                 startIcon={<DeleteIcon />}
-                onClick={onClearResults}
+                onClick={handleDeleteClick}
             >
                 удалить
             </Button>
+
+            <Dialog open={deleteDialogOpen} onClose={handleClose}>
+                <DialogTitle>Удалить все результаты?</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Вы уверены, что хотите удалить все свои результаты? Это действие нельзя отменить.
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} color="primary">
+                        Отмена
+                    </Button>
+                    <Button onClick={handleConfirmDelete} color="error">
+                        Удалить
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 }

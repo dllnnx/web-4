@@ -1,12 +1,21 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
+import {useNavigate} from "react-router-dom";
+import {useSelector} from "react-redux";
 import Graph from "../components/Graph";
 import CoordinatesForm from "../components/CoordinatesForm";
 import MainHeader from "../components/MainHeader";
 import ResultTable from "../components/ResultTable";
-import {useSelector} from "react-redux";
 
 export default function MainPage(){
     const [results, setResults] = useState([]);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            navigate("/");
+        }
+    })
 
     const handleAddResult = (result: any) => {
         setResults((prevResults) => [...prevResults, result]);
