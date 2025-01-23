@@ -105,14 +105,8 @@ export default class GraphPainter {
         this.ctx.stroke();
     }
 
-    drawPoint(x: number, y: number, r: number, success = true) {
+    drawPoint(x: number, y: number, success = true) {
         const totalPoints = 12;
-        let r_now = this.r;
-        if(r_now != null) {
-            x *= r_now / r
-            y *= r_now / r
-
-        }
         this.ctx.fillStyle = success
             ? this.COLOR_GREEN
             : this.COLOR_RED;

@@ -11,17 +11,8 @@ interface GraphProps {
 
 export default ({width, height, radius, onAddResult, token}: GraphProps) => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
+    const graphPainterRef = useRef<GraphPainter | null>(null);
     const [points, setPoints] = useState<any[]>([]);
-    const graphPainter = new GraphPainter(canvasRef.current, canvasRef.current?.getContext('2d'), radius);
-
-    useEffect(() => {
-        if (!canvasRef?.current?.getContext('2d')) return
-        const canvas = canvasRef.current;
-        const ctx = canvas.getContext("2d");
-        if (ctx == null) return
-        const graphPainter = new GraphPainter(canvas, ctx, radius);
-        graphPainter.redrawAll(radius);
-    }, [radius]);
 
     // загрузка точек
     const fetchPoints = async () => {
@@ -48,28 +39,34 @@ export default ({width, height, radius, onAddResult, token}: GraphProps) => {
     };
 
     const drawGraph = () => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
+        if (!graphPainterRef.current) return;
 
-        const ctx = canvas.getContext("2d");
-        if (!ctx) return;
-
-        const graphPainter = new GraphPainter(canvas, ctx, radius);
-
-        graphPainter.redrawAll(radius);
+        graphPainterRef.current.redrawAll(radius);
 
         points.forEach((point) => {
-            graphPainter.drawPoint(
+            graphPainterRef.current?.drawPoint(
                 point.x,
                 point.y,
-                radius,
                 point.isHit
             );
         });
     };
 
     useEffect(() => {
+        const canvas = canvasRef.current;
+
+        if (canvas) {
+            const ctx = canvas.getContext("2d");
+            if (ctx) {
+                graphPainterRef.current = new GraphPainter(canvas, ctx, radius);
+            }
+        }
+
         fetchPoints();
+
+        return () => {
+            graphPainterRef.current = null;
+        };
     }, []);
 
     useEffect(() => {
@@ -78,7 +75,7 @@ export default ({width, height, radius, onAddResult, token}: GraphProps) => {
 
     const handleCanvasClick = async (event: React.MouseEvent<HTMLCanvasElement>) => {
         const canvas = canvasRef.current;
-        if (!canvas) return;
+        if (!canvas || !graphPainterRef.current) return;
 
         const rect = canvas.getBoundingClientRect();
         const pointInPixels = 300 / 12;
@@ -109,7 +106,8 @@ export default ({width, height, radius, onAddResult, token}: GraphProps) => {
 
             if (response.ok) {
                 const data = await response.json();
-                graphPainter.drawPoint(data.x, data.y, radius, data.isHit === true);
+                graphPainterRef.current.drawPoint(data.x, data.y, radius, data.isHit === true);
+                setPoints((prevPoints) => [...prevPoints, data]);
                 onAddResult(data);
             } else {
                 console.error(`Ошибка: ${response.status} ${response.statusText}`);

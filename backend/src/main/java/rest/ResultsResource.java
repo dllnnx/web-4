@@ -135,4 +135,41 @@ public class ResultsResource {
                     .build();
         }
     }
+
+    @Path("/userStats")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUserStats(@HeaderParam("Authorization") String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return Response
+                    .status(Response.Status.UNAUTHORIZED)
+                    .entity("Token not found")
+                    .build();
+        }
+
+        String token = authHeader.substring("Bearer ".length());
+        User user = tokenService.getUserFromToken(token);
+        if (Objects.isNull(user)) {
+            return Response
+                    .status(Response.Status.UNAUTHORIZED)
+                    .entity("User not found")
+                    .build();
+        }
+
+        try {
+            String login = user.getLogin();
+            String totalResults = String.valueOf(user.getResults().toArray().length);
+            String hits = String.valueOf(user.getResults().stream().filter(Result::isHit).count());
+            String misses = String.valueOf(user.getResults().stream().filter(r -> !r.isHit()).count());
+            return Response
+                    .status(Response.Status.OK)
+                    .entity("{\"login\":\"" + login + "\",\"totalResults\":\"" + totalResults + "\",\"hits\":\"" + hits + "\",\"misses\":\"" + misses + "\"}")
+                    .build();
+        } catch (Exception e) {
+            return Response
+                    .status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Error while fetching stats")
+                    .build();
+        }
+    }
 }

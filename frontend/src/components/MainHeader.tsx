@@ -1,6 +1,15 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
-import {IconButton, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button} from "@mui/material";
+import {
+    IconButton,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    Button,
+    Typography,
+} from "@mui/material";
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ThemeSwitch from "./ThemeSwitch";
@@ -14,6 +23,37 @@ export default function MainHeader() {
     const dispatch = useDispatch();
 
     const [isLogoutDialogOpen, setLogoutDialogOpen] = useState(false);
+    const [isUserDialogOpen, setUserDialogOpen] = useState(false);
+    const [userStats, setUserStats] = useState({
+        login: "Загрузка...",
+        totalResults: 0,
+        hits: 0,
+        misses: 0,
+    });
+
+    const fetchUserStats = async () => {
+        try {
+            const response = await fetch("http://localhost:24147/backend/api/results/userStats", {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            });
+            if (response.ok) {
+                const data = await response.json();
+                setUserStats({
+                    login: data.login,
+                    totalResults: data.totalResults,
+                    hits: data.hits,
+                    misses: data.misses,
+                });
+            } else {
+                console.error("Ошибка получения статистики пользователя:", response.statusText);
+            }
+        } catch (error) {
+            console.error("Произошла ошибка при получении статистики:", error);
+        }
+    };
 
     const handleLogout = () => {
         dispatch(logout());
@@ -22,6 +62,13 @@ export default function MainHeader() {
 
     const toggleLogoutDialog = () => {
         setLogoutDialogOpen(!isLogoutDialogOpen);
+    };
+
+    const toggleUserDialog = () => {
+        if (!isUserDialogOpen) {
+            fetchUserStats();
+        }
+        setUserDialogOpen(!isUserDialogOpen);
     };
 
     return (
@@ -46,6 +93,7 @@ export default function MainHeader() {
                         aria-label="user"
                         style={{ color: isDark ? "white" : "black" }}
                         size="large"
+                        onClick={toggleUserDialog}
                     >
                         <AccountCircleOutlinedIcon fontSize="medium"/>
                     </IconButton>
@@ -65,6 +113,28 @@ export default function MainHeader() {
                     </Button>
                     <Button onClick={handleLogout} color="error" autoFocus>
                         Выйти
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+            <Dialog
+                open={isUserDialogOpen}
+                onClose={toggleUserDialog}
+                aria-labelledby="user-dialog-title"
+                aria-describedby="user-dialog-description"
+            >
+                <DialogTitle id="user-dialog-title">Профиль пользователя</DialogTitle>
+                <DialogContent>
+                    <Typography variant="body1">Логин: {userStats.login}</Typography>
+                    <Typography variant="body1">
+                        Количество результатов: {userStats.totalResults}
+                    </Typography>
+                    <Typography variant="body1">Попаданий: {userStats.hits}</Typography>
+                    <Typography variant="body1">Промахов: {userStats.misses}</Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={toggleUserDialog} color="primary">
+                        Закрыть
                     </Button>
                 </DialogActions>
             </Dialog>
