@@ -4,27 +4,21 @@ export default class GraphPainter {
     TEXT_MARGIN = 15;
     TEXT_LINE_HEIGHT = 3;
     COLOR_RED = "#b50300"
-    COLOR_GREEN = "#00b509"
+    COLOR_GREEN = "#66FF66"
     COLOR_MAIN = "#9999CC"
     WIDTH_IN_POINTS = 12;
 
     canvas: HTMLCanvasElement
     ctx: CanvasRenderingContext2D
     r: number | undefined
-    dots: Array<number> | undefined // TODO: change to array of objects
-    fetchCoordinates: (x: number, y: number, r: number) => void
 
     constructor(canvas: HTMLCanvasElement,
                 context: CanvasRenderingContext2D,
-                r: number | undefined,
-                dots: Array<number> | undefined,
-                fetchCoordinates: (x: number, y: number, r: number) => void
+                r: number | undefined
                 ) {
         this.canvas = canvas;
         this.ctx = context;
         this.r = r;
-        this.dots = dots;
-        this.fetchCoordinates = fetchCoordinates;
     }
 
     redrawAll(r: number){
@@ -38,7 +32,6 @@ export default class GraphPainter {
         this.setPointerAtDot(-2)
         this.setPointerAtDot(5)
         this.setPointerAtDot(-5)
-        // this.drawPoints();
     }
 
     drawAxes() {
@@ -112,61 +105,6 @@ export default class GraphPainter {
         this.ctx.stroke();
     }
 
-    // parseClick(event){
-    //     const xPixels = event.clientX - this.canvas.getBoundingClientRect().left;
-    //     const yPixels = event.clientY - this.canvas.getBoundingClientRect().top;
-    //     const pointInPixels = this.SIZE / this.WIDTH_IN_POINTS;
-    //     const x = (- (this.SIZE / 2 - xPixels) / pointInPixels).toFixed(4)
-    //     const y = ((this.SIZE / 2 - yPixels) / pointInPixels).toFixed(4)
-    //
-    //     if(x > 2 || x < -2 || y > 3 || y < -3) {
-    //         Swal.fire({
-    //             title: 'Клик вне зоны графика',
-    //             text: 'X принимает значения от -2 до 2, Y от -3 до 3',
-    //             icon: 'warning'
-    //         });
-    //         return
-    //     }
-    //
-    //     if(!this.lastClickedR) {
-    //         Swal.fire({
-    //             title: 'Невозможно определить радиус',
-    //             text: 'Выберите радиус',
-    //             icon: 'warning'
-    //         });
-    //         return
-    //     }
-    //
-    //     addAttempt(
-    //         [
-    //             { name: "x", value: x.toString() },
-    //             { name: "y", value: y.toString() },
-    //             { name: "r", value: this.lastClickedR.toString() }
-    //         ]
-    //     )
-    //
-    //     updateGraph();
-    // }
-
-    // drawPoints(){
-    //     let arrData = [];
-    //     $(".main-table tr").each(function(){
-    //         let currentRow=$(this);
-    //         arrData.push({
-    //             "x": parseFloat(currentRow.find("td:eq(0)").text()),
-    //             "y": parseFloat(currentRow.find("td:eq(1)").text()),
-    //             "r": parseFloat(currentRow.find("td:eq(2)").text()),
-    //             "status": currentRow.find("td:eq(3)").text() === "yes!",
-    //             "time": currentRow.find("td:eq(4)").text(),
-    //             "scriptTime": currentRow.find("td:eq(5)").text()
-    //         })
-    //     });
-    //     arrData.shift() // Delete headers
-    //     arrData.forEach(dot =>{
-    //         graphPainter.drawPoint(dot.x, dot.y, dot.r, dot.status)
-    //     })
-    // }
-
     drawPoint(x: number, y: number, r: number, success = true) {
         const totalPoints = 12;
         let r_now = this.r;
@@ -183,21 +121,10 @@ export default class GraphPainter {
         this.ctx.arc(
             this.SIZE / 2 + pointInPixels * x,
             this.SIZE / 2 - y * pointInPixels,
-            5,
+            2,
             0,
             Math.PI * 2,
         );
         this.ctx.fill();
-        this.ctx.beginPath();
-        this.ctx.fillStyle = "black"
-        this.ctx.lineWidth = 1.5
-        this.ctx.arc(
-            this.SIZE / 2 + pointInPixels * x,
-            this.SIZE / 2 - y * pointInPixels,
-            5,
-            0,
-            Math.PI * 2
-        )
-        this.ctx.stroke();
     }
 }

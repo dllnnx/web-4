@@ -13,7 +13,7 @@ interface CoordinatesFormProps {
     onAddResult: (result: any) => void;
 }
 
-export default function CoordinatesForm ({ onAddResult }: CoordinatesFormProps){
+export default function CoordinatesForm ({ onAddResult, onRadiusChange }: CoordinatesFormProps & { onRadiusChange: (r: number) => void }){
     const [x, setX] = useState<number>(0);
     const [y, setY] = useState<string>('');
     const [r, setR] = useState<number>(1);
@@ -35,6 +35,12 @@ export default function CoordinatesForm ({ onAddResult }: CoordinatesFormProps){
             setY(value);
             setError(true);
         }
+    };
+
+    const handleRadiusChange = (e: any) => {
+        const newRadius = e.value as number;
+        setR(newRadius);
+        onRadiusChange(newRadius);
     };
 
     const handleSubmit = async () => {
@@ -95,7 +101,7 @@ export default function CoordinatesForm ({ onAddResult }: CoordinatesFormProps){
                 <Slider
                     id="radius-slider"
                     value={r}
-                    onChange={(e) => setR(e.value as number)}
+                    onChange={handleRadiusChange}
                     min={0.1}
                     max={5}
                     step={0.1}
@@ -125,6 +131,7 @@ export default function CoordinatesForm ({ onAddResult }: CoordinatesFormProps){
                         setY('');
                         setR(1);
                         setError(true);
+                        handleRadiusChange({ value: 1 });
                     }}
                 >
                     очистить

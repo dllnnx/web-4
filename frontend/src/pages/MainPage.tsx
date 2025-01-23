@@ -8,10 +8,11 @@ import ResultTable from "../components/ResultTable";
 
 export default function MainPage(){
     const [results, setResults] = useState([]);
+    const [radius, setRadius] = useState<number>(1);
+    const token = localStorage.getItem("token");
     const navigate = useNavigate();
 
     useEffect(() => {
-        const token = localStorage.getItem("token");
         if (!token) {
             navigate("/");
         }
@@ -54,10 +55,18 @@ export default function MainPage(){
                 <MainHeader/>
             </div>
             <div className="flex ml-10 flex-col justify-center">
-                <CoordinatesForm onAddResult={handleAddResult} />
+                <CoordinatesForm onAddResult={handleAddResult}
+                                 onRadiusChange={(newRadius) => setRadius(newRadius)}
+                />
             </div>
             <div className="flex flex-col justify-center grow-0 space-y-4">
-                <Graph width={300} height={300}/>
+                <Graph
+                    width={300}
+                    height={300}
+                    radius={radius}
+                    onAddResult={handleAddResult}
+                    token={token}
+                />
             </div>
             <div>
                 <ResultTable results={results} onClearResults={handleClearResults}/>
