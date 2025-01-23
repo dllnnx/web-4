@@ -30,9 +30,10 @@ interface Result {
 interface ResultTableProps {
     results: Result[];
     onClearResults: () => void;
+    onClearGraph: () => void;
 }
 
-export default function ResultTable({ results, onClearResults }: ResultTableProps) {
+export default function ResultTable({ results, onClearResults, onClearGraph }: ResultTableProps) {
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -62,6 +63,7 @@ export default function ResultTable({ results, onClearResults }: ResultTableProp
 
             if (response.ok) {
                 onClearResults();
+                onClearGraph();
                 setDeleteDialogOpen(false);
             } else {
                 console.error("Ошибка удаления результатов:", response.statusText);
@@ -91,7 +93,7 @@ export default function ResultTable({ results, onClearResults }: ResultTableProp
                         <TableCell>y</TableCell>
                         <TableCell>r</TableCell>
                         <TableCell>результат</TableCell>
-                        <TableCell>выполнение (мс)</TableCell>
+                        <TableCell>время (мс)</TableCell>
                         <TableCell>дата и время</TableCell>
                     </TableRow>
                 </TableHead>
@@ -107,7 +109,7 @@ export default function ResultTable({ results, onClearResults }: ResultTableProp
                                 <TableCell>{result.r}</TableCell>
                                 <TableCell>{result.isHit ? "попадание" : "мимо"}</TableCell>
                                 <TableCell>{result.scriptTime}</TableCell>
-                                <TableCell>{result.startTime}</TableCell>
+                                <TableCell className="break-words">{result.startTime}</TableCell>
                             </TableRow>
                         ))}
                 </TableBody>

@@ -1,6 +1,5 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useRef} from "react";
 import {useNavigate} from "react-router-dom";
-import {useSelector} from "react-redux";
 import Graph from "../components/Graph";
 import CoordinatesForm from "../components/CoordinatesForm";
 import MainHeader from "../components/MainHeader";
@@ -10,6 +9,7 @@ export default function MainPage(){
     const [results, setResults] = useState([]);
     const [radius, setRadius] = useState<number>(1);
     const token = localStorage.getItem("token");
+    const graphRef = useRef<{ clearGraph: () => void } | null>(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -49,6 +49,10 @@ export default function MainPage(){
         setResults([]);
     };
 
+    const handleClearGraph = () => {
+        graphRef.current?.clearGraph();
+    };
+
     return (
         <div className="flex justify-between w-screen h-screen">
             <div className="fixed top-0 left-0 w-full header-shadow z-50">
@@ -61,15 +65,21 @@ export default function MainPage(){
             </div>
             <div className="flex flex-col justify-center grow-0 space-y-4">
                 <Graph
+                    ref={graphRef}
                     width={300}
                     height={300}
                     radius={radius}
+                    results={results}
                     onAddResult={handleAddResult}
                     token={token}
                 />
             </div>
             <div>
-                <ResultTable results={results} onClearResults={handleClearResults}/>
+                <ResultTable
+                    results={results}
+                    onClearResults={handleClearResults}
+                    onClearGraph={handleClearGraph}
+                />
             </div>
         </div>
     )
